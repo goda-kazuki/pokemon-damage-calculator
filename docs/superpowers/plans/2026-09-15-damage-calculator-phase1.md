@@ -28,18 +28,20 @@
 ### Task 1: テスト環境のセットアップとステータス計算関数
 
 **Files:**
+
 - Create: `lib/damage.ts`
 - Create: `lib/damage.test.ts`
 - Modify: `package.json`
 
 **Interfaces:**
+
 - Produces: `calculateStat(baseStat: number, ev: number): number`(`lib/damage.ts` からエクスポート。Task 3のUIから呼び出される)
 
-- [ ] **Step 1: Vitest を導入する**
+- [x] **Step 1: Vitest を導入する**
 
 Run: `npm install -D vitest`
 
-- [ ] **Step 2: package.json に test スクリプトを追加する**
+- [x] **Step 2: package.json に test スクリプトを追加する**
 
 `scripts` に以下を追加する。
 
@@ -47,7 +49,7 @@ Run: `npm install -D vitest`
 "test": "vitest run"
 ```
 
-- [ ] **Step 3: 失敗するテストを書く**
+- [x] **Step 3: 失敗するテストを書く**
 
 `lib/damage.test.ts` に以下のテストを書く(仕様書の式: `floor(floor((2×種族値+31+努力値)×50÷100)+5)`)。
 
@@ -66,21 +68,21 @@ describe("calculateStat", () => {
 });
 ```
 
-- [ ] **Step 4: テストを実行し、失敗することを確認する**
+- [x] **Step 4: テストを実行し、失敗することを確認する**
 
 Run: `npx vitest run`
 Expected: FAIL(`lib/damage.ts` が存在しない、または `calculateStat` が未定義のため)
 
-- [ ] **Step 5: `calculateStat` を実装する**
+- [x] **Step 5: `calculateStat` を実装する**
 
 `lib/damage.ts` に、上記の式に基づいて `calculateStat(baseStat, ev)` を実装する(実装はご自身で書いてください)。
 
-- [ ] **Step 6: テストを実行し、成功することを確認する**
+- [x] **Step 6: テストを実行し、成功することを確認する**
 
 Run: `npx vitest run`
 Expected: PASS
 
-- [ ] **Step 7: コミットする**
+- [x] **Step 7: コミットする**
 
 ```bash
 git add lib/damage.ts lib/damage.test.ts package.json package-lock.json
@@ -92,13 +94,15 @@ git commit -m "ステータス計算関数(calculateStat)を追加"
 ### Task 2: ダメージ計算関数
 
 **Files:**
+
 - Modify: `lib/damage.ts`
 - Modify: `lib/damage.test.ts`
 
 **Interfaces:**
+
 - Produces: `calculateDamage(power: number, attackStat: number, defenseStat: number): { min: number; max: number }`(`lib/damage.ts` からエクスポート。Task 3のUIから呼び出される)
 
-- [ ] **Step 1: 失敗するテストを書く**
+- [x] **Step 1: 失敗するテストを書く**
 
 `lib/damage.test.ts` に以下を追記する(仕様書の式: `基本ダメージ = (22 × 威力 × 攻撃 ÷ 防御) ÷ 50 + 2`、`最小 = floor(基本ダメージ×0.85)`、`最大 = floor(基本ダメージ×1.00)`)。
 
@@ -116,21 +120,21 @@ describe("calculateDamage", () => {
 });
 ```
 
-- [ ] **Step 2: テストを実行し、失敗することを確認する**
+- [x] **Step 2: テストを実行し、失敗することを確認する**
 
 Run: `npx vitest run`
 Expected: FAIL(`calculateDamage` が未定義のため)
 
-- [ ] **Step 3: `calculateDamage` を実装する**
+- [x] **Step 3: `calculateDamage` を実装する**
 
 `lib/damage.ts` に、上記の式に基づいて `calculateDamage(power, attackStat, defenseStat)` を実装する(実装はご自身で書いてください)。
 
-- [ ] **Step 4: テストを実行し、成功することを確認する**
+- [x] **Step 4: テストを実行し、成功することを確認する**
 
 Run: `npx vitest run`
 Expected: PASS(Task 1のテストも含め全件成功)
 
-- [ ] **Step 5: コミットする**
+- [x] **Step 5: コミットする**
 
 ```bash
 git add lib/damage.ts lib/damage.test.ts
@@ -142,9 +146,11 @@ git commit -m "ダメージ計算関数(calculateDamage)を追加"
 ### Task 3: 入力フォームと結果表示のUI実装
 
 **Files:**
+
 - Modify: `app/page.tsx`
 
 **Interfaces:**
+
 - Consumes: `calculateStat(baseStat: number, ev: number): number`、`calculateDamage(power: number, attackStat: number, defenseStat: number): { min: number; max: number }`(いずれも `lib/damage.ts` からimport)
 
 **フォームで管理する状態(イメージ)**
@@ -170,32 +176,32 @@ type MoveCategory = "physical" | "special";
 - ボタン押下時に、`calculateStat` で攻撃側・防御側のステータスをそれぞれ計算し、その結果を `calculateDamage` に渡してダメージ範囲を算出、結果を画面に表示する
 - カテゴリは実際の計算式には影響しない(攻撃/とくこう、防御/とくぼうの区別はフェーズ1では入力欄のラベル切り替えのみでよい。将来フェーズでタイプ相性などを扱う際に区別が必要になる)
 
-- [ ] **Step 1: フォームのUIを実装する**
+- [x] **Step 1: フォームのUIを実装する**
 
 `app/page.tsx` に、上記の入力欄と「計算する」ボタンを実装する(実装はご自身で書いてください)。
 
-- [ ] **Step 2: 計算結果の表示を実装する**
+- [x] **Step 2: 計算結果の表示を実装する**
 
 ボタン押下時に `calculateStat` → `calculateDamage` を呼び出し、結果(最小値~最大値)を画面に表示する処理を実装する(実装はご自身で書いてください)。
 
-- [ ] **Step 3: 手動で動作確認する**
+- [x] **Step 3: 手動で動作確認する**
 
 Run: `npm run dev`
 
 `http://localhost:3000` で以下を入力し、結果が一致することを確認する。
 
-| 入力 | 値 |
-|---|---|
-| カテゴリ | 物理 |
-| 威力 | 80 |
-| 攻撃側 種族値 | 100 |
-| 攻撃側 努力値 | 32 |
-| 防御側 種族値 | 100 |
-| 防御側 努力値 | 0 |
+| 入力          | 値   |
+| ------------- | ---- |
+| カテゴリ      | 物理 |
+| 威力          | 80   |
+| 攻撃側 種族値 | 100  |
+| 攻撃側 努力値 | 32   |
+| 防御側 種族値 | 100  |
+| 防御側 努力値 | 0    |
 
 期待結果: 攻撃側ステータス136、防御側ステータス120 → `calculateDamage(80, 136, 120)` の結果、最小35・最大41が画面に表示される
 
-- [ ] **Step 4: コミットする**
+- [x] **Step 4: コミットする**
 
 ```bash
 git add app/page.tsx
