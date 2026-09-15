@@ -12,7 +12,6 @@ describe("calculateStat", () => {
   });
 });
 
-
 describe("calculateDamage", () => {
   it("威力100・攻撃100・防御100のとき min:39 max:46 になる", () => {
     expect(calculateDamage(100, 100, 100)).toEqual({ min: 39, max: 46 });
