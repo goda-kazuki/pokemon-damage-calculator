@@ -1,67 +1,141 @@
-import Image from "next/image";
+'use client';
+
+import { calculateStat, calculateDamage } from "@/lib/damage";
+import { useState } from "react";
+
 
 export default function Home() {
+  const [category, setCategory] = useState<"physical" | "special">("physical");
+
+  const [power, setPower] = useState(100);
+
+  const [attackerBase, setAttackerBase] = useState(80);
+  const [attackerEv, setAttackerEv] = useState(32);
+
+    const [defenderBase, setDefenderBase] = useState(80);
+  const [defenderEv, setDefenderEv] = useState(32);  const [result, setResult] = useState<{ min: number; max: number } | null>(null);
+
+  const handleCalculate = () => {
+    const attackStat = calculateStat(attackerBase, attackerEv);
+    const defenseStat = calculateStat(defenderBase, defenderEv);
+    const damage = calculateDamage(power, attackStat, defenseStat);
+    setResult(damage);
+  };
+
+  const handleNumberChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setter: (value: number) => void
+  ) => {
+    setter(Number(e.target.value));
+  };
+
+
   return (
     <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
+
         <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          <form className="flex flex-col gap-2">
+            <div>
+              <label>
+                <input
+                  type="radio"
+                  name="category"
+                  value="physical"
+                  checked={category === "physical"}
+                  onChange={() => setCategory("physical")}
+                />
+                物理
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="category"
+                  value="special"
+                  checked={category === "special"}
+                  onChange={() => setCategory("special")}
+                />
+                特殊
+              </label>
+            </div>
+
+            <div>
+              <label>
+                技の威力
+                <input className="border border-gray-300 rounded-md p-2 w-24"
+                  type="number"
+                  value={power}
+                  onChange={(e) => handleNumberChange(e, setPower)}
+                  placeholder="技の威力"
+                />
+              </label>
+            </div>
+
+            <div>
+              <label>
+                攻撃側の種族値
+                <input className="border border-gray-300 rounded-md p-2 w-24"
+                  type="number"
+                  value={attackerBase}
+                  onChange={(e) => handleNumberChange(e, setAttackerBase)}
+                  placeholder="攻撃側の種族値"
+                />
+              </label>
+            </div>
+
+            <div>
+              <label>
+                攻撃側の努力値
+                <input className="border border-gray-300 rounded-md p-2 w-24"
+                  type="number"
+                  value={attackerEv}
+                  onChange={(e) => handleNumberChange(e, setAttackerEv)}
+                  placeholder="攻撃側の努力値"
+                />
+              </label>
+            </div>
+
+            <div>
+              <label>
+                防御側の種族値
+                <input className="border border-gray-300 rounded-md p-2 w-24"
+                  type="number"
+                  value={defenderBase}
+                  onChange={(e) => handleNumberChange(e, setDefenderBase)}
+                  placeholder="防御側の種族値"
+                />
+              </label>
+            </div>
+
+            <div>
+              <label>
+                防御側の努力値
+                <input className="border border-gray-300 rounded-md p-2 w-24"
+                  type="number"
+                  value={defenderEv}
+                  onChange={(e) => handleNumberChange(e, setDefenderEv)}
+                  placeholder="防御側の努力値"
+                />
+              </label>
+            </div>
+
+
+            <div>
+              <button className="bg-blue-500 text-white rounded-md p-2 ml-2"
+                type="button"
+                onClick={handleCalculate}
+              >
+                計算
+              </button>
+            </div>
+          </form>
+
+          {result && (
+            <p>
+              ダメージ: {result.min} ~ {result.max}
+            </p>
+          )}
+
         </div>
       </main>
     </div>
