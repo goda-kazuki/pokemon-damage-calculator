@@ -6,7 +6,7 @@ export default async function Page() {
 
   return (
     <div>
-      <h1>ポケモン</h1>
+      <h1>ポケモンチャンピオンズで使えるポケモン</h1>
       <ul>
         {pokemonList.map((pokemon) => (
           <li key={pokemon.id}>

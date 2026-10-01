@@ -54,6 +54,34 @@ export async function getPokemonList(): Promise<Pokemon[]> {
       AND formname.language_id = 11
       AND formname.name <> ''
     WHERE speciesname.language_id = 11
+      AND (
+        EXISTS (
+          SELECT 1
+          FROM pokemon_v2_pokemonmove pm
+          JOIN pokemon_v2_versiongroup vg
+            ON vg.id = pm.version_group_id
+          WHERE pm.pokemon_id = p.id
+            AND vg.name = 'champions'
+        )
+        OR (
+          p.pokemon_species_id IN (
+            SELECT dn.pokemon_species_id
+            FROM pokemon_v2_pokemondexnumber dn
+            JOIN pokemon_v2_pokedex d
+              ON d.id = dn.pokedex_id
+            WHERE d.name = 'champions'
+          )
+          AND (
+            p.is_default
+            OR EXISTS (
+              SELECT 1
+              FROM pokemon_v2_pokemonform mf
+              WHERE mf.pokemon_id = p.id
+                AND mf.is_mega
+            )
+          )
+        )
+      )
     ORDER BY p.id, form.is_default DESC NULLS LAST, form.id
     `,
   );
